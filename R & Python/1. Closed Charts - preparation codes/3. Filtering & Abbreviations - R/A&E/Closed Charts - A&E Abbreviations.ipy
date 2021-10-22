@@ -1,0 +1,12 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Oct 25 23:13:48 2020
+
+@author: amri.kyaruzi
+"""
+
+
+import pandas as pd
+data = pd.read_csv(r"C:\Users\amri.kyaruzi\Documents\A&E - Use of Abbreviations on Informed consent forms.csv")
+data.head(5)
+data['LEGIBLE'].value_counts(normalize=True).mul(100).round(2).astype('str') + '%'

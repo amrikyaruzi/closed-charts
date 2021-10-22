@@ -1,0 +1,27 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Oct 26 09:56:45 2020
+
+@author: amri.kyaruzi
+"""
+
+
+import pandas as pd
+data = pd.read_csv(r"C:\Users\amri.kyaruzi\Documents\OME DETAILS JULY - SEPTEMBER.csv", engine='python')
+
+print(data.head(5))
+
+is_SNN = data['SNN'] == 4.2
+is_documented = data['DOCUMENTED'] == 'D'
+
+mydata = data[is_documented & is_SNN]
+
+print(mydata.head(5))
+
+#By department
+mydata.groupby('DEPT')['TIMELY'].value_counts()
+mydata.groupby('DEPT')['TIMELY'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%"
+
+#Overall for the entire institution
+mydata['TIMELY'].value_counts()
+mydata['TIMELY'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%"

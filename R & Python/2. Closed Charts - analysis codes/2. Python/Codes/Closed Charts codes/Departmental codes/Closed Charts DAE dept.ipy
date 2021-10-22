@@ -1,0 +1,146 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Apr  4 18:39:05 2020
+
+@author: amri.kyaruzi
+"""
+%reset -f
+
+import pandas as pd
+mydata = pd.read_csv(r"D:/Work/Medical Director's office/OME/2020 - 2021/Data/Closed charts/Data/A&E April - September 2020.csv", engine='python')
+print(mydata.head())
+
+#Filters
+is_documented = (mydata['DOCUMENTED'] == 'D') | (mydata['DOCUMENTED'] == 'ND')
+is_timely = (mydata['TIMELY'] == 'Y') | (mydata['TIMELY'] == 'N')
+is_legible = (mydata['LEGIBLE'] == 'Y') | (mydata['LEGIBLE'] == 'N')
+is_complete = (mydata['COMPLETE'] == 'Y') | (mydata['COMPLETE'] == 'N')
+is_met = (mydata['MET'] == 'M') | (mydata['MET'] == 'NM')
+
+is_doctor = mydata['TYPE'] == 'P'
+is_nurse = mydata['TYPE'] == 'N'
+
+#Filtered Dataframes
+documentedDAE = mydata[is_documented]
+timelyDAE = mydata[is_timely]
+legibleDAE = mydata[is_legible]
+completeDAE = mydata[is_complete]
+metDAE = mydata[is_met]
+
+#Closed Charts Data for the Emergency Department:
+print('DOCUMENTED SCORES DAE')
+print(documentedDAE['DOCUMENTED'].value_counts(normalize=True).mul(100).round(2).astype('str') + '%')
+print("")
+print('TIMELINESS SCORES DAE')
+print(timelyDAE['TIMELY'].value_counts(normalize=True).mul(100).round(2).astype('str') + '%')
+print("")
+print('LEGIBILITY SCORES DAE')
+print(legibleDAE['LEGIBLE'].value_counts(normalize=True).mul(100).round(2).astype('str') + '%')
+print("")
+print('COMPLETENESS SCORES DAE')
+print(completeDAE['COMPLETE'].value_counts(normalize=True).mul(100).round(2).astype('str') + '%')
+print("")
+print('OVERALL COMPLIANCE SCORES DAE')
+print(metDAE['MET'].value_counts(normalize=True).mul(100).round(2).astype('str') + '%')
+print("")
+#Scores vs Documents
+print(documentedDAE.groupby('DOCUMENTS')['DOCUMENTED'].value_counts(normalize=True).mul(100).round(2).sort_values(ascending=False).astype('str') + "%")
+print("")
+print(timelyDAE.groupby('DOCUMENTS')['TIMELY'].value_counts(normalize=True).mul(100).round(2).sort_values(ascending=False).astype('str') + "%")
+print("")
+print(legibleDAE.groupby('DOCUMENTS')['LEGIBLE'].value_counts(normalize=True).mul(100).round(2).sort_values(ascending=False).astype('str') + "%")
+print("")
+print(completeDAE.groupby('DOCUMENTS')['COMPLETE'].value_counts(normalize=True).mul(100).round(2).sort_values(ascending=False).astype('str') + "%")
+print("")
+print(metDAE.groupby('DOCUMENTS')['MET'].value_counts(normalize=True).mul(100).round(2).sort_values(ascending=False).astype('str') + "%")
+print("")
+print("END OF DEPARTMENTAL SCORES")
+print("*********************************************************")
+print("")
+
+#Physician only overall scores
+documentedPHYSICIAN = mydata[is_doctor & is_documented]
+timelyPHYSICIAN = mydata[is_doctor & is_timely]
+legiblePHYSICIAN = mydata[is_doctor & is_legible]
+completePHYSICIAN = mydata[is_doctor & is_complete]
+metPHYSICIAN = mydata[is_doctor & is_met]
+
+print("PHYSICIAN ONLY SCORES - DOCUMENTED")
+print(documentedPHYSICIAN['DOCUMENTED'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print("PHYSICIAN ONLY SCORES - TIMELY")
+print(timelyPHYSICIAN['TIMELY'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print("PHYSICIAN ONLY SCORES - LEGIBILITY")
+print(legiblePHYSICIAN['LEGIBLE'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print("PHYSICIAN ONLY SCORES - COMPLETENESS")
+print(completePHYSICIAN['COMPLETE'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print("PHYSICIAN ONLY SCORES - OVERALL SCORES")
+print(metPHYSICIAN['MET'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+
+print(documentedPHYSICIAN.groupby('DOCUMENTS')['DOCUMENTED'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print(timelyPHYSICIAN.groupby('DOCUMENTS')['TIMELY'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print(legiblePHYSICIAN.groupby('DOCUMENTS')['LEGIBLE'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print(completePHYSICIAN.groupby('DOCUMENTS')['COMPLETE'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print(metPHYSICIAN.groupby('DOCUMENTS')['MET'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+
+#Physicians - Individual Scores
+print("Physician Individual scores")
+print(documentedPHYSICIAN.groupby('DOCTOR')['DOCUMENTED'].value_counts(normalize=True).mul(100).round(2).astype('str') + "%")
+print("")
+print(timelyPHYSICIAN.groupby('DOCTOR')['TIMELY'].value_counts(normalize=True).mul(100).round(2).astype('str') + "%")
+print("")
+print("")
+print(legiblePHYSICIAN.groupby('DOCTOR')['LEGIBLE'].value_counts(normalize=True).mul(100).round(2).astype('str') + "%")
+print("")
+print(completePHYSICIAN.groupby('DOCTOR')['COMPLETE'].value_counts(normalize=True).mul(100).round(2).astype('str') + "%")
+print("")
+print(metPHYSICIAN.groupby('DOCTOR')['MET'].value_counts(normalize=True).mul(100).round(2).astype('str') + "%")
+print("")
+print("END OF PHYSICIAN SCORES")
+print("*********************************************************")
+print("")
+
+#Nurses only overall scores
+documentedNURSES = mydata[is_nurse & is_documented]
+timelyNURSES = mydata[is_nurse & is_timely]
+legibleNURSES = mydata[is_nurse & is_legible]
+completeNURSES = mydata[is_nurse & is_complete]
+metNURSES = mydata[is_nurse & is_met]
+
+print("NURSES ONLY SCORES - DOCUMENTED")
+print(documentedNURSES['DOCUMENTED'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print("NURSES ONLY SCORES - TIMELY")
+print(timelyNURSES['TIMELY'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print("NURSES ONLY SCORES - LEGIBILITY")
+print(legibleNURSES['LEGIBLE'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print("NURSES ONLY SCORES - COMPLETENESS")
+print(completeNURSES['COMPLETE'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print("NURSES ONLY SCORES - OVERALL SCORES")
+print(metNURSES['MET'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+
+print(documentedNURSES.groupby('DOCUMENTS')['DOCUMENTED'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print(timelyNURSES.groupby('DOCUMENTS')['TIMELY'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print(legibleNURSES.groupby('DOCUMENTS')['LEGIBLE'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print(completeNURSES.groupby('DOCUMENTS')['COMPLETE'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print(metNURSES.groupby('DOCUMENTS')['MET'].value_counts(normalize=True).mul(100).round(1).astype('str') + "%")
+print("")
+print("END OF NURSING SCORES")
+print("*********************************************************")
